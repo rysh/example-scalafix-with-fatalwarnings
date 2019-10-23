@@ -5,9 +5,6 @@ ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.example"
 ThisBuild / organizationName := "example"
 
-val fatalWarningOff = taskKey[Unit]("fatalWarningOff")
-val fatalWarningOn = taskKey[Unit]("fatalWarningOn")
-
 lazy val root = (project in file("."))
   .settings(
     name := "example-scalafix-with-fatalwarnings",
@@ -16,18 +13,9 @@ lazy val root = (project in file("."))
     scalacOptions ++= List(
       "-Yrangepos",
       "-Ywarn-unused-import",
-      "-Xfatal-warnings",
       "-Xlint"
     ),
-    fatalWarningOff := {
-      scalacOptions -= "-Xfatal-warnings"
-      println("removed -Xfatal-warnings")
-    },
-    fatalWarningOn := {
-      scalacOptions += "-Xfatal-warnings"
-      println("added  -Xfatal-warnings")
-    }
+    scalacOptions in compile += "-Xfatal-warnings"
   )
 
-
-addCommandAlias("fix", "fatalWarningOff;scalafix;test:scalafix;fatalWarningOn")
+addCommandAlias("fix", "scalafix;test:scalafix")
