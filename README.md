@@ -1,0 +1,1 @@
+# example-scalafix-with-fatalwarnings
