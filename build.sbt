@@ -15,19 +15,13 @@ lazy val root = (project in file("."))
     name := "example-scalafix-with-fatalwarnings",
     libraryDependencies += scalaTest % Test,
     addCompilerPlugin(scalafixSemanticdb),
-    scalacOptions := {
-      List(
-        "-Yrangepos",
-        "-Ywarn-unused-import",
-        "-Xlint"
-      ) ++ (if (isFatalWarningOn.get()) Seq("-Xfatal-warnings") else Nil)
-    },
-    fatalWarningOff := {
-      isFatalWarningOn.set(false)
-    },
-    fatalWarningOn := {
-      isFatalWarningOn.set(true)
-    }
+    scalacOptions := List(
+      "-Yrangepos",
+      "-Ywarn-unused-import",
+      "-Xlint"
+    ) ++ (if (isFatalWarningOn.get) Seq("-Xfatal-warnings") else Nil),
+    fatalWarningOff := isFatalWarningOn.set(false),
+    fatalWarningOn := isFatalWarningOn.set(true)
   )
 
 addCommandAlias("fix", "fatalWarningOff;scalafix;test:scalafix;fatalWarningOn")
