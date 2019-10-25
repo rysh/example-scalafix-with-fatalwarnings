@@ -10,10 +10,18 @@ val isFatalWarningOn = new AtomicBoolean(true)
 val fatalWarningOff = taskKey[Unit]("fatalWarningOff")
 val fatalWarningOn = taskKey[Unit]("fatalWarningOn")
 
+val silencerVersion = "1.4.4"
+
 lazy val root = (project in file("."))
   .settings(
     name := "example-scalafix-with-fatalwarnings",
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies ++= Seq(
+      scalaTest % Test,
+      compilerPlugin(
+        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
+      ),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+    ),
     addCompilerPlugin(scalafixSemanticdb),
     scalacOptions := List(
       "-Yrangepos",
