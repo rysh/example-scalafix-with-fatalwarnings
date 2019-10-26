@@ -32,4 +32,13 @@ lazy val root = (project in file("."))
     fatalWarningOn := isFatalWarningOn.set(true)
   )
 
+def ensureSilencerIsLast(options: Seq[String]): Seq[String] = {
+  val (Seq(silencer), rest) =
+    options.partition(o => o.startsWith("-Xplugin:") && o.contains("silencer"))
+  rest :+ silencer
+}
+
+scalacOptions in Compile := ensureSilencerIsLast((scalacOptions in Compile).value)
+scalacOptions in Test := ensureSilencerIsLast((scalacOptions in Test).value)
+
 addCommandAlias("fix", "fatalWarningOff;scalafix;test:scalafix;fatalWarningOn")
