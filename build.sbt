@@ -17,17 +17,17 @@ lazy val root = (project in file("."))
     name := "example-scalafix-with-fatalwarnings",
     libraryDependencies ++= Seq(
       scalaTest % Test,
-      compilerPlugin(
-        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
-      ),
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
     ),
     addCompilerPlugin(scalafixSemanticdb),
-    scalacOptions := List(
+    scalacOptions ++= List(
       "-Yrangepos",
       "-Ywarn-unused-import",
       "-Xlint"
-    ) ++ (if (isFatalWarningOn.get) Seq("-Xfatal-warnings") else Nil),
+    ),
+    scalacOptions ++= (if (isFatalWarningOn.get) Seq("-Xfatal-warnings") else Nil),
+    scalacOptions --= (if (!isFatalWarningOn.get) Seq("-Xfatal-warnings") else Nil),
     fatalWarningOff := isFatalWarningOn.set(false),
     fatalWarningOn := isFatalWarningOn.set(true)
   )
