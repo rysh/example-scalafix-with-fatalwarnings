@@ -35,7 +35,9 @@ lazy val root = (project in file("."))
 def ensureSilencerIsLast(options: Seq[String]): Seq[String] = {
   val (Seq(silencer), rest) =
     options.partition(o => o.startsWith("-Xplugin:") && o.contains("silencer"))
-  rest :+ silencer
+  val newOptions = rest :+ silencer
+  newOptions.foreach(println)
+  newOptions
 }
 
 scalacOptions in Compile := ensureSilencerIsLast((scalacOptions in Compile).value)
